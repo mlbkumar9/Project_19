@@ -1,0 +1,4 @@
+
+# Ignore generated models and predictions
+Trained_Models/
+Predictions/
