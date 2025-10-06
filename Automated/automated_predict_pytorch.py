@@ -53,12 +53,27 @@ def main(backbone):
         if binary_mask is None: continue
 
         damage_area = np.count_nonzero(binary_mask)
-        print(f"  Image: {filename}, Predicted Damage Area: {damage_area} pixels")
+
+        # --- Classify Damage ---
+        category = "No Damage Detected"
+        if damage_area > 17671: # PARTIALLY_DAMAGED_AREA_THRESHOLD
+            category = "Completely damaged"
+        elif damage_area > 5026: # MANAGEABLE_AREA_THRESHOLD
+            category = "Partially damaged"
+        elif damage_area > 0:
+            category = "Manageable"
+
+        print(f"  Image: {filename}, Category: {category}, Predicted Damage Area: {damage_area} pixels")
 
         cv2.imwrite(os.path.join(OUTPUT_DIR, 'Masks', filename), binary_mask)
         overlay_image = original_image.copy()
         contours, _ = cv2.findContours(binary_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         cv2.drawContours(overlay_image, contours, -1, (0, 0, 255), 2)
+
+        # --- Add Labels to Overlay ---
+        cv2.putText(overlay_image, f"Category: {category}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+        cv2.putText(overlay_image, f"Area: {damage_area} px", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 0), 2)
+
         cv2.imwrite(os.path.join(OUTPUT_DIR, 'Overlays', filename), overlay_image)
 
     print(f"--- PyTorch Prediction Complete. Results in {OUTPUT_DIR} ---")
