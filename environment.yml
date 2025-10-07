@@ -1,0 +1,23 @@
+name: project_19
+channels:
+  - defaults
+  - conda-forge
+  - pytorch
+dependencies:
+  - python=3.10
+  - pytorch
+  - torchvision
+  - torchaudio
+  - cpuonly
+  - pip
+  - pip:
+    - tensorflow>=2.10.0
+    - keras
+    - opencv-python
+    - pillow
+    - numpy
+    - scikit-learn
+    - segmentation-models-pytorch
+    - keras-unet-collection
+    - flake8
+    - pytest
