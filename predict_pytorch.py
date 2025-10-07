@@ -66,7 +66,7 @@ def main():
     # --------------------------------------------------------------------------
 
     # --- Configuration ---
-    BASE_DIR = r'C:\Users\Maahi\Projects\Project_19'
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     INPUT_DIR = os.path.join(BASE_DIR, 'Input_Images_To_Analyze')
     OUTPUT_DIR = os.path.join(BASE_DIR, 'Predictions', 'Pytorch', BACKBONE)
     MODEL_PATH = os.path.join(BASE_DIR, 'Trained_Models', 'Pytorch', f'smp_unet_{BACKBONE}.pth')
@@ -101,6 +101,11 @@ def main():
     model.load_state_dict(torch.load(MODEL_PATH, map_location=device))
 
     # --- Process Images ---
+    if not os.path.isdir(INPUT_DIR):
+        print(f"Error: Input directory not found at {INPUT_DIR}")
+        print("Please create the directory and add images to analyze.")
+        return
+    
     image_files = [f for f in os.listdir(INPUT_DIR) if f.lower().endswith(('.png', '.jpg', '.jpeg'))]
     if not image_files:
         print(f"No images found in {INPUT_DIR}. Please add images to analyze.")

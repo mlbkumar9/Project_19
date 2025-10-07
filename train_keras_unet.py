@@ -38,7 +38,7 @@ IMG_CHANNELS = 3
 BACKBONE = 'ResNet50'  # <--- CHANGE THIS VALUE (use a Keras option)
 # --------------------------------------------------------------------------
 
-BASE_DIR = r'C:\Users\Maahi\Projects\Project_19'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 IMAGE_DIR = os.path.join(BASE_DIR, 'RAW_Images')
 MASK_DIR = os.path.join(BASE_DIR, 'Masks')
 OUTPUT_MODEL_DIR = os.path.join(BASE_DIR, 'Trained_Models', 'Keras')
@@ -49,8 +49,27 @@ def load_data(image_dir, mask_dir, target_size=(IMG_WIDTH, IMG_HEIGHT)):
     """
     Loads images and masks and resizes them.
     """
+    if not os.path.isdir(image_dir):
+        print(f"Error: Image directory not found at {image_dir}")
+        return None, None
+    
+    if not os.path.isdir(mask_dir):
+        print(f"Error: Mask directory not found at {mask_dir}")
+        return None, None
+    
     image_files = sorted([os.path.join(image_dir, f) for f in os.listdir(image_dir) if f.endswith('.png')])
     mask_files = sorted([os.path.join(mask_dir, f) for f in os.listdir(mask_dir) if f.endswith('.png')])
+
+    if not image_files or not mask_files:
+        print(f"Error: No training data found!")
+        print(f"  Image directory: {image_dir} (found {len(image_files)} images)")
+        print(f"  Mask directory: {mask_dir} (found {len(mask_files)} masks)")
+        return None, None
+    
+    if len(image_files) != len(mask_files):
+        print(f"Warning: Mismatch between number of images ({len(image_files)}) and masks ({len(mask_files)})")
+        print("Please ensure each image has a corresponding mask file with the same name.")
+        return None, None
 
     X = []
     y = []
@@ -58,11 +77,17 @@ def load_data(image_dir, mask_dir, target_size=(IMG_WIDTH, IMG_HEIGHT)):
     print(f"Loading {len(image_files)} images and masks...")
     for img_path, mask_path in zip(image_files, mask_files):
         img = cv2.imread(img_path, cv2.IMREAD_COLOR)
+        if img is None:
+            print(f"Warning: Could not read image at {img_path}, skipping...")
+            continue
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
         img = cv2.resize(img, target_size)
         X.append(img)
 
         mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
+        if mask is None:
+            print(f"Warning: Could not read mask at {mask_path}, skipping...")
+            continue
         mask = cv2.resize(mask, target_size)
         mask = np.expand_dims(mask, axis=-1)
         y.append(mask)
@@ -80,6 +105,11 @@ def main():
     os.makedirs(OUTPUT_MODEL_DIR, exist_ok=True)
 
     X, y = load_data(IMAGE_DIR, MASK_DIR)
+    
+    if X is None or y is None or len(X) == 0:
+        print("Failed to load training data. Exiting.")
+        return
+    
     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
 
     print(f"Data loaded. Training samples: {len(X_train)}, Validation samples: {len(X_val)}")

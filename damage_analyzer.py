@@ -56,7 +56,7 @@ def main():
     Main function to run the damage analysis process on a directory of images.
     """
     # --- Configuration ---
-    BASE_DIR = r'C:\Users\Maahi\Projects\Project_19'
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     input_dir = os.path.join(BASE_DIR, 'RAW_Images')
     output_dir = os.path.join(BASE_DIR, 'Processed_Images')
     mask_dir = os.path.join(BASE_DIR, 'Masks')

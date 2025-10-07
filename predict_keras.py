@@ -36,7 +36,7 @@ IMG_HEIGHT = 512
 BACKBONE = 'ResNet50'  # <--- CHANGE THIS VALUE (use a Keras option)
 # --------------------------------------------------------------------------
 
-BASE_DIR = r'C:\Users\Maahi\Projects\Project_19'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 INPUT_DIR = os.path.join(BASE_DIR, 'Input_Images_To_Analyze')
 OUTPUT_DIR = os.path.join(BASE_DIR, 'Predictions', 'Keras', f'unet-plus_{BACKBONE}')
 MODEL_PATH = os.path.join(BASE_DIR, 'Trained_Models', 'Keras', f'kuc_unet-plus_{BACKBONE}.keras')
@@ -69,6 +69,11 @@ def main():
     print("Model loaded successfully.")
 
     # --- 2. Setup Output Directories ---
+    if not os.path.isdir(INPUT_DIR):
+        print(f"Error: Input directory not found at {INPUT_DIR}")
+        print("Please create the directory and add images to analyze.")
+        return
+    
     output_mask_dir = os.path.join(OUTPUT_DIR, 'Masks')
     output_overlay_dir = os.path.join(OUTPUT_DIR, 'Overlays')
     os.makedirs(output_mask_dir, exist_ok=True)

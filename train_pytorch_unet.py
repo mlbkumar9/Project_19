@@ -76,7 +76,7 @@ def main():
     # --------------------------------------------------------------------------
 
     # --- Configuration ---
-    BASE_DIR = r'C:\Users\Maahi\Projects\Project_19'
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     IMAGE_DIR = os.path.join(BASE_DIR, 'RAW_Images')
     MASK_DIR = os.path.join(BASE_DIR, 'Masks')
     OUTPUT_MODEL_DIR = os.path.join(BASE_DIR, 'Trained_Models', 'Pytorch')
@@ -93,6 +93,19 @@ def main():
     # --- Data Loading and Splitting ---
     image_paths = sorted(glob.glob(os.path.join(IMAGE_DIR, '*.png')))
     mask_paths = sorted(glob.glob(os.path.join(MASK_DIR, '*.png')))
+    
+    if not image_paths or not mask_paths:
+        print(f"Error: No training data found!")
+        print(f"  Image directory: {IMAGE_DIR} (found {len(image_paths)} images)")
+        print(f"  Mask directory: {MASK_DIR} (found {len(mask_paths)} masks)")
+        print("Please ensure training data exists before running this script.")
+        return
+    
+    if len(image_paths) != len(mask_paths):
+        print(f"Warning: Mismatch between number of images ({len(image_paths)}) and masks ({len(mask_paths)})")
+        print("Please ensure each image has a corresponding mask file with the same name.")
+        return
+    
     train_images, val_images, train_masks, val_masks = train_test_split(
         image_paths, mask_paths, test_size=0.2, random_state=42
     )
