@@ -32,11 +32,12 @@ def preprocess_image(image_path, target_size=(224, 224)):
         print(f"An error occurred during image preprocessing: {e}")
         return None
 
-def classify_image(image_path):
+def classify_image(model, image_path):
     """
     Preprocesses an image and classifies it using a pre-trained MobileNetV2 model.
 
     Args:
+        model: The pre-trained MobileNetV2 model.
         image_path (str): The path to the image file.
         
     Returns:
@@ -46,11 +47,8 @@ def classify_image(image_path):
     preprocessed_image = preprocess_image(image_path)
 
     if preprocessed_image is not None:
-        # Load the pre-trained MobileNetV2 model
-        model = tf.keras.applications.MobileNetV2(weights='imagenet')
-
         # Make a prediction
-        predictions = model.predict(preprocessed_image)
+        predictions = model.predict(preprocessed_image, verbose=0)
 
         # Decode the predictions to get human-readable labels
         decoded_predictions = tf.keras.applications.mobilenet_v2.decode_predictions(predictions, top=3)[0]
@@ -61,7 +59,7 @@ def classify_image(image_path):
 if __name__ == '__main__':
     # --- Configuration ---
     
-    base_dir = r'C:\Users\Maahi\Projects\Project_19'
+    base_dir = os.path.dirname(os.path.abspath(__file__))
     image_directory = os.path.join(base_dir, 'RAW_Images')
     output_dir = os.path.join(base_dir, 'ImageNet_Classified_Images')
     csv_output_file = os.path.join(base_dir, 'imagenet_classification_results.csv')
@@ -76,13 +74,18 @@ if __name__ == '__main__':
     else:
         print(f"Classifying images in: {image_directory}")
         
+        # --- Load model once (FIXED: was loading for each image) ---
+        print("Loading MobileNetV2 model...")
+        model = tf.keras.applications.MobileNetV2(weights='imagenet')
+        print("Model loaded successfully.")
+        
         # --- Process Each Image ---
         for filename in sorted(os.listdir(image_directory)):
             if filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp')):
                 image_path = os.path.join(image_directory, filename)
                 print(f"--- Classifying {filename} ---")
                 
-                predictions = classify_image(image_path)
+                predictions = classify_image(model, image_path)
 
                 if predictions:
                     # --- 1. Store Results for CSV ---
