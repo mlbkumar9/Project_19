@@ -1,4 +1,3 @@
-
 import os
 import numpy as np
 import cv2
@@ -24,9 +23,32 @@ def load_data(image_dir, mask_dir, target_size=(IMG_WIDTH, IMG_HEIGHT)):
         mask = cv2.resize(mask, target_size)
         mask = np.expand_dims(mask, axis=-1)
         y.append(mask)
-    X = np.array(X, dtype='float32') / 255.0
+    # Return images in [0, 255] range for preprocessing
+    X = np.array(X, dtype='float32')
     y = np.array(y, dtype='float32') / 255.0
     return X, y
+
+def preprocess_for_backbone(X, backbone_name):
+    """Applies the appropriate preprocessing for a given backbone."""
+    # The preprocess_input functions expect input in [0, 255] range
+    if 'DenseNet' in backbone_name:
+        from tensorflow.keras.applications.densenet import preprocess_input
+        return preprocess_input(X)
+    elif 'ResNet' in backbone_name and 'V2' not in backbone_name:
+        from tensorflow.keras.applications.resnet import preprocess_input
+        return preprocess_input(X)
+    elif 'ResNet' in backbone_name and 'V2' in backbone_name:
+        from tensorflow.keras.applications.resnet_v2 import preprocess_input
+        return preprocess_input(X)
+    elif 'VGG' in backbone_name:
+        from tensorflow.keras.applications.vgg16 import preprocess_input
+        return preprocess_input(X)
+    elif 'MobileNetV2' == backbone_name:
+        from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
+        return preprocess_input(X)
+    else:
+        # Default preprocessing if no backbone is matched
+        return X / 255.0
 
 def main(backbone):
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -38,7 +60,11 @@ def main(backbone):
     os.makedirs(OUTPUT_MODEL_DIR, exist_ok=True)
 
     X, y = load_data(IMAGE_DIR, MASK_DIR)
-    X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
+    
+    # Apply backbone-specific preprocessing
+    X_processed = preprocess_for_backbone(X.copy(), backbone)
+
+    X_train, X_val, y_train, y_val = train_test_split(X_processed, y, test_size=0.2, random_state=42)
 
     print(f"--- Starting Keras Training: U-Net++ with '{backbone}' backbone ---")
 
