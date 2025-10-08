@@ -6,12 +6,12 @@ channels:
 dependencies:
   - python=3.10
   - pip
-  # PyTorch and related packages
-  - pytorch>=2.8.0
-  - torchvision>=0.23.0
-  - cudatoolkit  # Optional, only if you need GPU support
-  # TensorFlow and Keras
-  - tensorflow>=2.20.0
+  # PyTorch and related packages (CPU-only for CI compatibility)
+  - cpuonly
+  - pytorch=2.5.1
+  - torchvision=0.20.1
+  # TensorFlow and Keras (CPU version)
+  - tensorflow=2.18.1
   # Scientific computing and ML
   - scikit-learn>=1.7.2
   - numpy
