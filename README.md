@@ -158,11 +158,11 @@ python -c "import tensorflow as tf; import torch; print('TensorFlow:', tf.__vers
 ### Core Dependencies
 
 ```
-tensorflow==2.20.0
-torch==2.8.0
-torchvision==0.23.0
+tensorflow>=2.16.0,<2.18.0
+torch>=2.5.0,<2.7.0
+torchvision>=0.20.0,<0.22.0
 opencv-python==4.12.0.88
-scikit-learn==1.7.2
+scikit-learn>=1.5.0,<1.7.0
 ```
 
 ### Segmentation Libraries
