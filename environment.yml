@@ -9,13 +9,13 @@ dependencies:
   # PyTorch and related packages with compatible versions
   - pytorch>=2.5.0,<2.7.0
   - torchvision>=0.20.0,<0.22.0
-  - pytorch-cuda=12.1  # Replaces deprecated cudatoolkit
-  # TensorFlow and Keras (corrected to existing version)
+  - pytorch-cuda>=12.1  # Flexible CUDA version to avoid dependency conflicts
+  # TensorFlow and Keras
   - tensorflow>=2.16.0,<2.18.0
   # Scientific computing and ML
   - scikit-learn>=1.5.0,<1.7.0
   - numpy
-  # Testing and linting tools (for your GitHub Actions)
+  # Testing and linting tools
   - pytest
   - flake8
   # pip packages that are not available in conda
