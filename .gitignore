@@ -2,6 +2,7 @@
 # Python
 __pycache__/
 *.pyc
+.pytest_cache/
 
 # IDEs and editors
 .vscode/
