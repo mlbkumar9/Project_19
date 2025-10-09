@@ -66,7 +66,7 @@ def main():
     # --------------------------------------------------------------------------
 
     # --- Configuration ---
-    BASE_DIR = r'C:\Users\Maahi\Projects\Project_19'
+    BASE_DIR = os.path.dirname(os.path.realpath(__file__))
     INPUT_DIR = os.path.join(BASE_DIR, 'Input_Images_To_Analyze')
     OUTPUT_DIR = os.path.join(BASE_DIR, 'Predictions', 'Pytorch', BACKBONE)
     MODEL_PATH = os.path.join(BASE_DIR, 'Trained_Models', 'Pytorch', f'smp_unet_{BACKBONE}.pth')

@@ -36,7 +36,7 @@ IMG_HEIGHT = 512
 BACKBONE = 'ResNet50'  # <--- CHANGE THIS VALUE (use a Keras option)
 # --------------------------------------------------------------------------
 
-BASE_DIR = r'C:\Users\Maahi\Projects\Project_19'
+BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 INPUT_DIR = os.path.join(BASE_DIR, 'Input_Images_To_Analyze')
 OUTPUT_DIR = os.path.join(BASE_DIR, 'Predictions', 'Keras', f'unet-plus_{BACKBONE}')
 MODEL_PATH = os.path.join(BASE_DIR, 'Trained_Models', 'Keras', f'kuc_unet-plus_{BACKBONE}.keras')

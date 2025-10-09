@@ -61,7 +61,7 @@ def classify_image(image_path):
 if __name__ == '__main__':
     # --- Configuration ---
     
-    base_dir = r'C:\Users\Maahi\Projects\Project_19'
+    base_dir = os.path.dirname(os.path.realpath(__file__))
     image_directory = os.path.join(base_dir, 'RAW_Images')
     output_dir = os.path.join(base_dir, 'ImageNet_Classified_Images')
     csv_output_file = os.path.join(base_dir, 'imagenet_classification_results.csv')

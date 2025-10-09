@@ -38,7 +38,7 @@ IMG_CHANNELS = 3
 BACKBONE = 'ResNet50'  # <--- CHANGE THIS VALUE (use a Keras option)
 # --------------------------------------------------------------------------
 
-BASE_DIR = r'C:\Users\Maahi\Projects\Project_19'
+BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 IMAGE_DIR = os.path.join(BASE_DIR, 'RAW_Images')
 MASK_DIR = os.path.join(BASE_DIR, 'Masks')
 OUTPUT_MODEL_DIR = os.path.join(BASE_DIR, 'Trained_Models', 'Keras')
