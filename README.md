@@ -153,6 +153,61 @@ python -c "import tensorflow as tf; import torch; print('TensorFlow:', tf.__vers
 
 ---
 
+## ☁️ Google Colab Setup
+
+For users who prefer cloud-based development with free GPU/TPU access, this project includes optimized scripts for Google Colab.
+
+### 1. Upload Project to Google Drive
+
+Upload the entire `Project_19` folder to your Google Drive. A recommended path might be `MyDrive/1_Project_Files/Google_Colab/19_Project_19`.
+
+### 2. Open a New Colab Notebook
+
+Go to [Google Colab](https://colab.research.google.com/) and create a new notebook.
+
+### 3. Mount Google Drive
+
+Run the following in a Colab cell to access your project files:
+
+```python
+from google.colab import drive
+drive.mount('/content/drive')
+```
+
+### 4. Install Dependencies
+
+Navigate to the `Google_Colab` directory within your mounted Drive and run the dedicated installation script. **Ensure you run this in a Colab cell.**
+
+```bash
+!python "/content/drive/MyDrive/1_Project_Files/Google_Colab/19_Project_19/Google_Colab/install_colab_dependencies.py"
+```
+
+This script will install all required Python packages. You might be prompted to restart the runtime after installation.
+
+### 5. Configure `COLAB_BASE_DIR`
+
+All Colab-optimized scripts (`*_colab.py`) contain a `COLAB_BASE_DIR` variable at the top. **You MUST set this variable to the absolute path of your `Project_19` folder within your mounted Google Drive.**
+
+Example (matching the recommended upload path):
+
+```python
+COLAB_BASE_DIR = '/content/drive/MyDrive/1_Project_Files/Google_Colab/19_Project_19'
+```
+
+Make sure this path is correct in each `*_colab.py` script you intend to run.
+
+### 6. Run Colab-Optimized Scripts
+
+Once dependencies are installed and `COLAB_BASE_DIR` is set, you can execute the Colab-optimized scripts.
+
+Example:
+
+```bash
+!python "/content/drive/MyDrive/1_Project_Files/Google_Colab/19_Project_19/Google_Colab/train_pytorch_unet_colab.py"
+```
+
+---
+
 ## 📦 Requirements
 
 ### Core Dependencies
@@ -221,6 +276,10 @@ python predict_pytorch.py
 # OR
 python predict_keras.py
 ```
+
+### Option 3: Google Colab
+
+Refer to the [Google Colab Setup](#-google-colab-setup) section for detailed instructions on how to run this project in a Colab environment.
 
 ---
 
@@ -613,6 +672,23 @@ Project_19/
 │       ├── Pytorch/
 │       └── Keras/
 │
+├── Google_Colab/                      # Scripts optimized for Google Colab
+│   ├── install_colab_dependencies.py # Installs all necessary dependencies
+│   ├── damage_analyzer_colab.py      # Colab-optimized damage analysis
+│   ├── image_classifier_CV_ImageNet_colab.py # Colab-optimized ImageNet classification
+│   ├── predict_keras_colab.py        # Colab-optimized Keras inference
+│   ├── predict_pytorch_colab.py      # Colab-optimized PyTorch inference
+│   ├── train_keras_unet_colab.py     # Colab-optimized Keras training
+│   └── train_pytorch_unet_colab.py   # Colab-optimized PyTorch training
+│   ├── Processed_Images/             # Colab-specific processed images
+│   ├── Masks/                        # Colab-specific generated masks
+│   ├── Trained_Models/               # Colab-specific trained models
+│   │   ├── Keras/
+│   │   └── Pytorch/
+│   └── Predictions/                  # Colab-specific prediction outputs
+│       ├── Keras/
+│       └── Pytorch/
+│
 ├── tests/                             # Unit tests
 │   └── ...
 │
@@ -637,6 +713,7 @@ Project_19/
 ### 1. `damage_analyzer.py`
 
 **Purpose**: Analyzes images to detect damage and generates training masks.
+**Colab Version**: `Google_Colab/damage_analyzer_colab.py`
 
 **Key Functions:**
 - `analyze_damage_area(image_path)`: Calculates damage area from white pixels
@@ -673,6 +750,7 @@ python damage_analyzer.py
 ### 2. `train_pytorch_unet.py`
 
 **Purpose**: Trains a U-Net segmentation model using PyTorch.
+**Colab Version**: `Google_Colab/train_pytorch_unet_colab.py`
 
 **Key Components:**
 - `DamageDataset`: Custom PyTorch Dataset for loading images and masks
@@ -717,6 +795,7 @@ python train_pytorch_unet.py
 ### 3. `train_keras_unet.py`
 
 **Purpose**: Trains a U-Net++ segmentation model using Keras/TensorFlow.
+**Colab Version**: `Google_Colab/train_keras_unet_colab.py`
 
 **Key Components:**
 - `load_data()`: Loads and preprocesses images and masks
@@ -766,6 +845,7 @@ python train_keras_unet.py
 ### 4. `predict_pytorch.py`
 
 **Purpose**: Performs inference using trained PyTorch models.
+**Colab Version**: `Google_Colab/predict_pytorch_colab.py`
 
 **Key Features:**
 - Loads trained model weights
@@ -789,6 +869,7 @@ python predict_pytorch.py
 ### 5. `predict_keras.py`
 
 **Purpose**: Performs inference using trained Keras models.
+**Colab Version**: `Google_Colab/predict_keras_colab.py`
 
 **Key Features:**
 - Loads trained Keras model
@@ -812,6 +893,7 @@ python predict_keras.py
 ### 6. `image_classifier_CV_ImageNet.py`
 
 **Purpose**: Auxiliary script for general object classification using pre-trained ImageNet models.
+**Colab Version**: `Google_Colab/image_classifier_CV_ImageNet_colab.py`
 
 **Functionality:**
 - Classifies objects in images using MobileNetV2
@@ -862,6 +944,25 @@ python image_classifier_CV_ImageNet.py
 - Runs predictions for all trained models
 - Organizes outputs by framework and backbone
 - Handles errors gracefully (continues on failure)
+
+---
+
+### 8. `Google_Colab/install_colab_dependencies.py`
+
+**Purpose**: Installs all necessary Python dependencies for running the project scripts in a Google Colab environment.
+
+**Functionality:**
+- Installs common libraries (numpy, opencv-python, pillow, scikit-learn).
+- Installs TensorFlow/Keras specific libraries (tensorflow, keras-unet-collection).
+- Installs PyTorch specific libraries (torch, torchvision, torchaudio, segmentation-models-pytorch).
+- Includes a check to verify the `COLAB_BASE_DIR` against the mounted Google Drive path.
+
+**Usage (in a Colab cell):**
+```bash
+!python "/content/drive/MyDrive/1_Project_Files/Google_Colab/19_Project_19/Google_Colab/install_colab_dependencies.py"
+```
+
+**Note**: This script uses `subprocess` to execute `pip install` commands and should be run in a Colab cell. It also attempts to mount Google Drive if not already mounted.
 
 **Workflow:**
 ```python
