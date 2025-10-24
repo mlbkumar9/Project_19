@@ -11,7 +11,7 @@ We welcome contributions to Project 19! Please follow the guidelines below to en
 3. **Install dependencies**: Navigate to the project directory and install the required dependencies:
    ```bash
    cd Project_19
-   npm install
+   pip install -r requirements.txt
    ```
 
 ## Pull Request Process

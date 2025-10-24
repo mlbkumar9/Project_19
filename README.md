@@ -460,14 +460,14 @@ Automated/
 ### Model Architectures
 
 #### U-Net (PyTorch)
-- **Encoder**: Pre-trained backbone from ImageNet
+- **Encoder**: Pre-trained backbone
 - **Decoder**: Symmetric expanding path with skip connections
 - **Output**: Single-channel mask with sigmoid activation
 - **Library**: `segmentation_models_pytorch`
 
 #### U-Net++ (Keras)
 - **Architecture**: Nested U-Net with dense skip pathways
-- **Encoder**: Pre-trained backbone from ImageNet
+- **Encoder**: Pre-trained backbone
 - **Decoder**: Multi-scale feature aggregation
 - **Output**: Single-channel mask with sigmoid activation
 - **Library**: `keras_unet_collection`
@@ -675,7 +675,6 @@ Project_19/
 ├── Google_Colab/                      # Scripts optimized for Google Colab
 │   ├── install_colab_dependencies.py # Installs all necessary dependencies
 │   ├── damage_analyzer_colab.py      # Colab-optimized damage analysis
-│   ├── image_classifier_CV_ImageNet_colab.py # Colab-optimized ImageNet classification
 │   ├── predict_keras_colab.py        # Colab-optimized Keras inference
 │   ├── predict_pytorch_colab.py      # Colab-optimized PyTorch inference
 │   ├── train_keras_unet_colab.py     # Colab-optimized Keras training
@@ -701,9 +700,7 @@ Project_19/
 ├── train_keras_unet.py               # Keras model training
 ├── predict_pytorch.py                # PyTorch inference
 ├── predict_keras.py                  # Keras inference
-├── image_classifier_CV_ImageNet.py   # ImageNet classification utility
-│
-└── damage_analysis_results.csv       # Damage quantification results
+├── damage_analysis_results.csv       # Damage quantification results
 ```
 
 ---
@@ -768,7 +765,6 @@ LEARNING_RATE = 1e-4        # Adam optimizer learning rate
 ```python
 model = smp.Unet(
     encoder_name=BACKBONE,
-    encoder_weights="imagenet",
     in_channels=3,
     classes=1,
 )
@@ -821,7 +817,6 @@ model = models.unet_plus_2d(
     output_activation='Sigmoid',
     batch_norm=True,
     backbone=BACKBONE,
-    weights='imagenet',
 )
 ```
 
@@ -887,50 +882,6 @@ python predict_pytorch.py
 # Ensure BACKBONE matches your trained model
 python predict_keras.py
 ```
-
----
-
-### 6. `image_classifier_CV_ImageNet.py`
-
-**Purpose**: Auxiliary script for general object classification using pre-trained ImageNet models.
-**Colab Version**: `Google_Colab/image_classifier_CV_ImageNet_colab.py`
-
-**Functionality:**
-- Classifies objects in images using MobileNetV2
-- Provides top-3 predictions with confidence scores
-- Useful for understanding image content before damage analysis
-
-**Key Functions:**
-- `preprocess_image(image_path, target_size)`: Prepares image for classification
-- `classify_image(model, image_path)`: Runs classification and returns predictions
-
-**Model:**
-- Pre-trained: MobileNetV2 with ImageNet weights
-- Input size: 224×224 pixels
-- Output: 1000 ImageNet class predictions
-
-**Usage:**
-```bash
-python image_classifier_CV_ImageNet.py
-```
-
-**Outputs:**
-- Annotated images in `ImageNet_Classified_Images/`
-- CSV file: `imagenet_classification_results.csv`
-- Console output with predictions:
-  ```
-  Top prediction: sports_car (0.87)
-  2: convertible (0.09)
-  3: race_car (0.03)
-  ```
-
-**Use Cases:**
-- Pre-screening images before damage analysis
-- Understanding image content and context
-- Verifying image quality and relevance
-- Educational purposes for computer vision
-
-**Note**: This script does **not** perform damage segmentation. It's a complementary tool for general image understanding.
 
 ---
 
