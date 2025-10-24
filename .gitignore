@@ -6,6 +6,8 @@ __pycache__/
 # IDEs and editors
 .vscode/
 .idea/
+.vs/
+19. Project_19.code-workspace
 
 # Generated data and results
 /damage_analysis_results.csv
