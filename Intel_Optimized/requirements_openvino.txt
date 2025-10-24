@@ -1,0 +1,15 @@
+
+tensorflow==2.20.0
+scikit-learn==1.7.2
+opencv-python==4.12.0.88
+keras-unet-collection==0.1.13
+segmentation-models==1.0.1
+segmentation_models_pytorch==0.5.0
+torch==2.8.0
+torchvision==0.23.0
+
+onnx
+onnxruntime
+onnxruntime-openvino
+tensorflow-intel
+intel-extension-for-pytorch
