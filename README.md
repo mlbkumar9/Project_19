@@ -33,7 +33,7 @@
 
 ## 🎯 Overview
 
-**Project 19** is a comprehensive deep learning solution for **automated damage detection and segmentation** in images using state-of-the-art computer vision techniques. The system leverages both **Keras (TensorFlow)** and **PyTorch** frameworks to provide robust, accurate pixel-level damage identification across multiple neural network architectures.
+**Project 19** is a comprehensive deep learning solution for **automated damage detection and segmentation** in images using state-of-the-art computer vision techniques. The system leverages both **Keras (TensorFlow)** and **PyTorch** frameworks to provide robust, accurate pixel-level damage identification across multiple neural network architectures, specifically focusing on surface damage and material defects.
 
 ### What This Project Does:
 
@@ -107,6 +107,7 @@
 │  • Quantified results                               │
 └─────────────────────────────────────────────────────┘
 ```
+(Note: Consider replacing this ASCII art with actual visual diagrams for better clarity.)
 
 ---
 
@@ -234,6 +235,8 @@ segmentation_models_pytorch==0.5.0 # For PyTorch
 - **Pillow**: Image loading and manipulation
 - **Matplotlib** (optional): Visualization of results
 - **tqdm** (optional): Progress bars during training
+
+These dependencies are listed in `requirements.txt` and can be installed using `pip install -r requirements.txt`.
 
 ### Hardware Requirements
 
@@ -460,14 +463,14 @@ Automated/
 ### Model Architectures
 
 #### U-Net (PyTorch)
-- **Encoder**: Pre-trained backbone
+- **Encoder**: Backbone
 - **Decoder**: Symmetric expanding path with skip connections
 - **Output**: Single-channel mask with sigmoid activation
 - **Library**: `segmentation_models_pytorch`
 
 #### U-Net++ (Keras)
 - **Architecture**: Nested U-Net with dense skip pathways
-- **Encoder**: Pre-trained backbone
+- **Encoder**: Backbone
 - **Decoder**: Multi-scale feature aggregation
 - **Output**: Single-channel mask with sigmoid activation
 - **Library**: `keras_unet_collection`
@@ -607,6 +610,7 @@ Highlighted: Extensive red overlay
 │   Area: 12,450 px                   │
 └─────────────────────────────────────┘
 ```
+(Note: Consider replacing this ASCII art with actual visual examples for better clarity.)
 
 ### Performance Comparison
 
@@ -616,7 +620,7 @@ Highlighted: Extensive red overlay
 | ResNet50 | Keras | ~30 min | 0.0856 | 0.08s |
 | VGG16 | PyTorch | ~22 min | 0.0934 | 0.04s |
 | VGG16 | Keras | ~28 min | 0.0901 | 0.07s |
-| MobileNetV2 | PyTorch | ~15 min | 0.1123 | 0.03s |
+| MobileNetV2 | PyTorch | 33 fps | 30ms |
 | DenseNet121 | PyTorch | ~28 min | 0.0845 | 0.06s |
 
 *Times measured on NVIDIA RTX 3080 GPU*
@@ -729,8 +733,9 @@ damage_area = cv2.countNonZero(damage_mask)
 - Output directories: `Processed_Images/`, `Masks/`
 - Threshold value: 240 (detects bright white pixels)
 - Classification thresholds:
-  - Manageable: 5,026 pixels
-  - Partially damaged: 17,671 pixels
+  - Manageable: 0 - 5,026 pixels
+  - Partially damaged: 5,027 - 17,671 pixels
+  - Completely Damaged: 17,672+ pixels
 
 **Usage:**
 ```bash
@@ -885,7 +890,7 @@ python predict_keras.py
 
 ---
 
-### 7. `Automated/run_all.py`
+### 6. `Automated/run_all.py`
 
 **Purpose**: Master automation script for comprehensive model training and evaluation.
 
@@ -896,9 +901,55 @@ python predict_keras.py
 - Organizes outputs by framework and backbone
 - Handles errors gracefully (continues on failure)
 
+**Sample Output:**
+```
+========================================
+Starting Automated Pipeline
+========================================
+
+[1/10] Processing backbone: resnet50
+  -> Training PyTorch model...
+  -> PyTorch training complete. Model saved.
+  -> Running PyTorch predictions...
+  -> Predictions saved.
+  -> Training Keras model...
+  -> Keras training complete. Model saved.
+  -> Running Keras predictions...
+  -> Predictions saved.
+
+[2/10] Processing backbone: vgg16
+...
+```
+
+**Where to Find Results:**
+
+All outputs are saved inside `/Automated/`:
+
+```
+Automated/
+├── Trained_Models/
+│   ├── Pytorch/
+│   │   ├── smp_unet_resnet50.pth
+│   │   ├── smp_unet_vgg16.pth
+│   │   └── ...
+│   └── Keras/
+│       ├── kuc_unet-plus_ResNet50.keras
+│       ├── kuc_unet-plus_VGG16.keras
+│       └── ...
+└── Predictions/
+    ├── Pytorch/
+    │   ├── resnet50/
+    │   ├── vgg16/
+    │   └── ...
+    └── Keras/
+        ├── ResNet50/
+        ├── VGG16/
+        └── ...
+```
+
 ---
 
-### 8. `Google_Colab/install_colab_dependencies.py`
+### 7. `Google_Colab/install_colab_dependencies.py`
 
 **Purpose**: Installs all necessary Python dependencies for running the project scripts in a Google Colab environment.
 
@@ -914,38 +965,6 @@ python predict_keras.py
 ```
 
 **Note**: This script uses `subprocess` to execute `pip install` commands and should be run in a Colab cell. It also attempts to mount Google Drive if not already mounted.
-
-**Workflow:**
-```python
-for backbone in BACKBONES:
-    1. Train PyTorch model
-    2. Predict with PyTorch model
-    3. Train Keras model
-    4. Predict with Keras model
-```
-
-**Features:**
-- Progress tracking with detailed console output
-- Error handling and reporting
-- Separate output directories for each model
-- Comprehensive result organization
-
-**Usage:**
-```bash
-# From project root
-python Automated/run_all.py
-```
-
-**Output Structure:**
-```
-Automated/
-├── Trained_Models/
-│   ├── Pytorch/smp_unet_{backbone}.pth
-│   └── Keras/kuc_unet-plus_{backbone}.keras
-└── Predictions/
-    ├── Pytorch/{backbone}/
-    └── Keras/{backbone}/
-```
 
 ---
 
