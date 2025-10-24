@@ -1,3 +1,9 @@
+"""
+U-Net Model Trainer (Multi-Backbone)
+
+This script trains a U-Net segmentation model to detect damage in images.
+It uses the segmentation-models-pytorch library for robust and correct architectures.
+"""
 import os
 import numpy as np
 import cv2

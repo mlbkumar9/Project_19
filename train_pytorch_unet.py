@@ -50,7 +50,7 @@ def main():
     """Main function to configure and run the training process."""
     # --------------------------------------------------------------------------
     #                    CHOOSE YOUR U-NET BACKBONE HERE
-    # --------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
     # Below is a combined list of available backbones.
     # For this PyTorch script, use the PyTorch-compatible options.
     #
@@ -73,7 +73,7 @@ def main():
     #      'efficientnet-b0' through 'efficientnet-b7' # (PyTorch only)
     #
     BACKBONE = 'resnet50'  # <--- CHANGE THIS VALUE (use a PyTorch option)
-    # --------------------------------------------------------------------------
+    #--------------------------------------------------------------------------
 
     # --- Configuration ---
     BASE_DIR = os.path.dirname(os.path.realpath(__file__))
